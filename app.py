@@ -1,21 +1,34 @@
+# Ensure your code starts with the 'if' condition
+if choice == "Data Sanitizer":
+    st.subheader("Autonomous Data Intake")
+    uploaded = st.file_uploader("Upload CSV/Excel", type=["csv", "xlsx"])
+    if uploaded:
+        st.session_state['data'] = pd.read_csv(uploaded) if uploaded.name.endswith('.csv') else pd.read_excel(uploaded)
+        st.success("Data successfully sanitized.")
+
+# All subsequent conditions must be 'elif'
 elif choice == "Dashboard Builder":
-    # --- Check for Data ---
     if st.session_state['data'] is None:
         st.warning("⚠️ Data Not Detected. Please upload your file in the 'Data Sanitizer' module first.")
-        st.info("The Dashboard requires a dataset to generate visual insights.")
     else:
-        # --- Proceed with Rendering if Data Exists ---
         df = st.session_state['data']
-        st.subheader("Performance Analytics")
+        x = st.selectbox("X-Axis", df.columns)
+        y = st.selectbox("Y-Axis", df.columns)
+        st.plotly_chart(px.bar(df, x=x, y=y, template="plotly_white"), use_container_width=True)
+
+elif choice == "SOP/Policy Library":
+    st.subheader("Operational Playbook Registry")
+    st.write("Browse your standard operating procedures.")
+
+elif choice == "Insights":
+    st.subheader("Business Case Studies")
+    st.write("Historical insights for Meridian Ops scaling.")
+
+elif choice == "Boardroom Prep":
+    st.subheader("Executive Briefing Mode")
+    if st.session_state['data'] is not None:
+        if st.button("Generate Presentation"):
+            st.success("Presentation generated.")
+    else:
+        st.warning("Please upload data in the Sanitizer first.")
         
-        # UI Layout for selecting axes
-        col1, col2 = st.columns(2)
-        x_axis = col1.selectbox("Select X-Axis", df.columns)
-        y_axis = col2.selectbox("Select Y-Axis", df.columns)
-        
-        # Generate Chart
-        fig = px.bar(df, x=x_axis, y=y_axis, template="plotly_white")
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Strategic Pro-Tip (The 'Consultant-in-a-Box' value)
-        st.info("💡 **Strategic Pro-Tip:** Observe the delta between your peaks and valleys to identify potential operational bottlenecks.")
