@@ -28,27 +28,46 @@ with st.sidebar:
 # --- 4. LOGIC ENGINE ---
 st.title(f"Meridian Ops: {choice}")
 
-elif choice == "Data Sanitizer":
+# 5. Logic Chain - Starts with IF, continues with ELIF
+st.title(f"Meridian Ops: {choice}")
+
+# THE FIRST BLOCK MUST BE 'if'
+if choice == "Data Sanitizer":
     st.subheader("Autonomous Data Intake")
     uploaded = st.file_uploader("Upload CSV/Excel", type=["csv", "xlsx"])
-    
     if uploaded:
         df = pd.read_csv(uploaded) if uploaded.name.endswith('.csv') else pd.read_excel(uploaded)
         st.session_state['data'] = df
-        
-        # --- Department Detection Logic ---
         cols = [c.lower() for c in df.columns]
-        if any(x in cols for x in ['revenue', 'sales', 'profit', 'margin']): 
-            st.session_state['dept'] = 'Sales'
-        elif any(x in cols for x in ['salary', 'employee', 'hiring', 'attendance']): 
-            st.session_state['dept'] = 'HR'
-        elif any(x in cols for x in ['budget', 'approval', 'tax', 'cost']): 
-            st.session_state['dept'] = 'Finance'
-        else: 
-            st.session_state['dept'] = 'General'
-            
+        if any(x in cols for x in ['revenue', 'sales', 'profit', 'margin']): st.session_state['dept'] = 'Sales'
+        elif any(x in cols for x in ['salary', 'employee', 'hiring', 'attendance']): st.session_state['dept'] = 'HR'
+        elif any(x in cols for x in ['budget', 'approval', 'tax', 'cost']): st.session_state['dept'] = 'Finance'
+        else: st.session_state['dept'] = 'General'
         st.success(f"Meridian Ops detected: **{st.session_state['dept']}** data.")
-        st.info(f"Applying specialized '{st.session_state['dept']}' analytical models...")
+
+# EVERY SUBSEQUENT BLOCK IS 'elif'
+elif choice == "Dashboard Builder":
+    st.subheader("Dashboard Builder")
+    if st.session_state['data'] is not None:
+        st.write(f"Analyzing {st.session_state['dept']} performance metrics...")
+    else:
+        st.warning("Please upload data in the Sanitizer first.")
+
+elif choice == "SOP/Policy Library":
+    st.subheader("Operational Playbook Registry")
+
+elif choice == "Meridian Co-Pilot":
+    st.subheader("Meridian Co-Pilot (AI Consultant)")
+    if not st.session_state['is_pro']:
+        st.warning("🔒 This is a Pro Feature.")
+        if st.button("Upgrade to Pro"): st.link_button("Pay via M-Pesa/Stripe", "https://your-payment-link.com")
+    else:
+        st.write("Co-Pilot is ready for your query.")
+
+elif choice == "Boardroom Prep":
+    st.subheader("Executive Briefing Mode")
+    if st.button("Generate Presentation"): 
+        st.success("Presentation ready for download.")
 
 elif choice == "Dashboard Builder":
     if st.session_state['data'] is not None:
