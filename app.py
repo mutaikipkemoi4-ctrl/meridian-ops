@@ -1,30 +1,12 @@
-# --- 1. SET UP THE SIDEBAR ---
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import openai
+
+# Everything else goes below these imports...
+st.set_page_config(page_title="Meridian Ops", layout="wide")
+
+# Now 'st' is defined and safe to use
 with st.sidebar:
-    menu = ["Data Sanitizer", "Dashboard Builder", "SOP/Policy Library", "Insights", "Boardroom Prep", "Meridian Co-Pilot"]
-    choice = st.radio("Navigation", menu)
-
-# --- 2. START THE MASTER SWITCH ---
-# Every logic block must be indented under this single sequence
-if choice == "Data Sanitizer":
-    # Your code for Sanitizer
-    pass
-
-elif choice == "Dashboard Builder":
-    # Your code for Dashboard
-    pass
-
-elif choice == "SOP/Policy Library":
-    # Your code for SOP
-    pass
-
-elif choice == "Insights":
-    # Your code for Insights
-    pass
-
-elif choice == "Boardroom Prep":
-    # Your code for Boardroom
-    pass
-
-elif choice == "Meridian Co-Pilot":
-    # Your code for Co-Pilot
-    pass
+    st.title("Meridian Ops")
+    # ... rest of your code
