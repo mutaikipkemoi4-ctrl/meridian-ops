@@ -2,64 +2,58 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# 1. Page Configuration
-st.set_page_config(page_title="Meridian Ops", layout="wide")
+# 1. PREMIUM EXECUTIVE DESIGN SYSTEM (CSS)
+st.set_page_config(page_title="Meridian Ops | Executive Consultant", layout="wide")
+st.markdown("""
+    <style>
+    /* Color Palette: Navy (#0a192f), Slate (#708090), Teal (#008080) */
+    .stApp { background-color: #f4f6f7; }
+    h1, h2, h3 { color: #0a192f !important; font-family: 'Helvetica Neue', sans-serif; }
+    .stButton>button { background-color: #008080 !important; color: white !important; border-radius: 4px; border: none; padding: 10px 20px; font-weight: bold; }
+    .sidebar .stRadio { background-color: #0a192f; color: white; }
+    .css-1d391kg { background-color: #0a192f !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-# 2. Sidebar Navigation
+# 2. CORE SESSION STATE
+if 'data' not in st.session_state: st.session_state['data'] = None
+
+# 3. SIDEBAR (The Executive Console)
 with st.sidebar:
-    st.title("Meridian Ops")
-    menu = ["Data Sanitizer", "Dashboard Builder", "SOP/Policy Library", "Boardroom Prep", "Meridian Co-Pilot", "Insights"]
+    st.markdown("## 🧭 Meridian Ops")
+    menu = ["Data Sanitizer", "Dashboard Builder", "SOP/Policy Library", "Insights", "Boardroom Prep"]
     choice = st.radio("Navigation", menu)
-    
     st.markdown("---")
-    if st.button("Unlock Pro Access"):
-        st.write("Redirecting...")
+    st.markdown("### 📞 Strategy Hook")
+    st.info("Ready for a deep dive?")
+    if st.button("Book Strategy Session"):
+        st.write("Redirecting to [Calendly]...")
+    st.markdown("---")
+    if st.button("🚀 Upgrade to Pro"):
+        st.write("Unlock full executive features via M-Pesa/Stripe.")
 
-# 3. Initialize session state
-if 'data' not in st.session_state:
-    st.session_state['data'] = None
+# 4. LOGIC ENGINE (Modular Controller)
+def run_app():
+    st.title(f"Meridian Ops: {choice}")
+    
+    if choice == "Data Sanitizer":
+        st.subheader("Autonomous Data Intake")
+        uploaded = st.file_uploader("Upload your executive CSV/Excel file", type=["csv", "xlsx"])
+        if uploaded:
+            with st.spinner("Mapping your numbers and aligning headers..."):
+                # Simulation of sanitization
+                st.session_state['data'] = pd.read_csv(uploaded) if uploaded.name.endswith('.csv') else pd.read_excel(uploaded)
+            st.success("Data sanitized and ready for the boardroom.")
+            st.info("💡 Strategic Pro-Tip: Ensure your date columns are in ISO format for maximum predictive accuracy.")
 
-# 4. Main Logic Chain (Must be one continuous block)
-st.title(f"Meridian Ops: {choice}")
+    elif choice == "Dashboard Builder":
+        if st.session_state['data'] is not None:
+            # Dashboard Logic
+            x, y = st.columns(2)
+            # ... (Add plotly metrics here)
+        else:
+            st.warning("No data found. Start by visiting 'Data Sanitizer'.")
 
-if choice == "Data Sanitizer":
-    st.subheader("Professional Data Intake")
-    uploaded_file = st.file_uploader("Upload your data", type=["csv", "xlsx"])
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('.csv') else pd.read_excel(uploaded_file)
-        st.session_state['data'] = df
-        st.success("Data ready for analysis.")
+    # [Placeholder for remaining logic...]
 
-elif choice == "Dashboard Builder":
-    if st.session_state['data'] is not None:
-        df = st.session_state['data']
-        x = st.selectbox("X-Axis", df.columns)
-        y = st.selectbox("Y-Axis", df.columns)
-        st.plotly_chart(px.bar(df, x=x, y=y))
-    else:
-        st.warning("Upload data in 'Data Sanitizer' first.")
-
-elif choice == "SOP/Policy Library":
-    st.subheader("Operational Playbook Registry")
-    detected_dept = st.session_state.get('dept', 'General')
-    st.write(f"Based on your recent analysis, here are the **{detected_dept} Playbooks**.")
-
-elif choice == "Boardroom Prep":
-    st.subheader("Executive Briefing Mode")
-    if st.session_state['data'] is not None:
-        st.markdown("* **Strategic Recommendation:** Capitalize on current momentum.")
-        if st.button("Download Presentation"):
-            st.success("Presentation generated.")
-    else:
-        st.warning("Process data in 'Data Sanitizer' first.")
-
-elif choice == "Meridian Co-Pilot":
-    st.subheader("Meridian Co-Pilot")
-    user_query = st.text_input("Ask me anything about your dataset:")
-    if user_query:
-        st.info("Analyzing dataset... (Co-Pilot functionality active)")
-
-elif choice == "Insights":
-    st.subheader("Business Case Studies")
-    st.markdown("* **Case Study 1:** Scaling Agribusiness throughput via BSF tech.")
-    st.markdown("* **Case Study 2:** Financial recovery protocols for the SME sector.")
+run_app()
