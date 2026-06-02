@@ -15,11 +15,13 @@ st.title(f"Meridian Ops: {choice}")
 
 # Phase 2 & 3: Logic
 if choice == "Data Sanitizer":
-    uploaded_file = st.file_uploader("Upload your data", type=["csv", "xlsx"])
+    st.subheader("Professional Data Intake")
+    uploaded_file = st.file_uploader("Upload your data (CSV/Excel)", type=["csv", "xlsx"])
     if uploaded_file:
         df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('.csv') else pd.read_excel(uploaded_file)
         st.success("Mapping your numbers...")
         st.session_state['data'] = df
+        st.dataframe(df.head())
         
         # Auto-detect department
         cols = str(df.columns.tolist()).lower()
@@ -32,7 +34,9 @@ if choice == "Data Sanitizer":
         st.write(f"Detected Department: **{st.session_state['dept']}**")
 
 elif choice == "Dashboard Builder":
+    st.write("Checking for data...") 
     if 'data' in st.session_state:
+        st.write("Data found!")
         dept = st.session_state.get('dept', 'General')
         st.subheader(f"{dept} Analysis Metrics")
         
@@ -41,10 +45,10 @@ elif choice == "Dashboard Builder":
         selected = st.multiselect("Select Metrics to Visualize", metrics)
         
         if selected:
-            # Simple placeholder chart for the selected metric
-            x_axis = st.selectbox("X-Axis", st.session_state['data'].columns)
-            y_axis = st.selectbox("Y-Axis", st.session_state['data'].columns)
+            cols = st.session_state['data'].columns.tolist()
+            x_axis = st.selectbox("X-Axis", cols)
+            y_axis = st.selectbox("Y-Axis", cols)
             fig = px.bar(st.session_state['data'], x=x_axis, y=y_axis)
             st.plotly_chart(fig)
     else:
-        st.warning("Please upload data in the Sanitizer first.")
+        st.warning("Please upload a file in the 'Data Sanitizer' module first.")
