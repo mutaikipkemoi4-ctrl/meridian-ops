@@ -23,7 +23,7 @@ if choice == "Data Sanitizer":
     if uploaded_file:
         df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('.csv') else pd.read_excel(uploaded_file)
         st.success("Data ingested successfully.")
-        st.session_state['data'] = df  # Store data globally in the app
+        st.session_state['data'] = df
         st.dataframe(df.head())
 
 elif choice == "Dashboard Builder":
@@ -36,3 +36,20 @@ elif choice == "Dashboard Builder":
         st.plotly_chart(fig)
     else:
         st.warning("Please upload a file in the 'Data Sanitizer' module first.")
+
+elif choice == "SOP/Policy Library":
+    st.subheader("Technical Operations & Policy Manuals")
+    category = st.selectbox("Select Category", ["Agribusiness", "Tea Industry", "Operational Strategy", "Sports/Performance"])
+    
+    docs = {
+        "Agribusiness": {"Black Soldier Fly Bio-Refinery": "Details on larval production and bio-refining."},
+        "Tea Industry": {"Understanding Kenyan Tea Grades": "Manual on BP1, PF1, and auction standards."},
+        "Operational Strategy": {"Meridian Ops Methodology": "Strategic framework for performance scaling."},
+        "Sports/Performance": {"The HYROX Protocol": "Comprehensive guide for tactical fitness pacing."}
+    }
+    
+    if category in docs:
+        selected_doc = st.selectbox("Select Manual", list(docs[category].keys()))
+        st.info(f"**{selected_doc}**")
+        st.write(docs[category][selected_doc])
+        st.button("Download PDF/Full Report")
