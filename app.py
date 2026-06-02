@@ -1,10 +1,3 @@
-elif choice == "Dashboard Builder":
-    st.write("Checking for data...") # Debug line
-    if 'data' in st.session_state:
-        st.write("Data found!") # Debug line
-        # ... rest of your code ...
-    else:
-        st.warning("Please upload a file in the 'Data Sanitizer' module first.")
 import streamlit as st
 import pandas as pd
 import plotly.express as px
